@@ -1,4 +1,4 @@
-# Wearable Wristband Stress Monitor — App Layer (URP-style)
+# Wearable Wristband Stress Monitor — App Layer
 
 This is the **software/app layer only** — Laravel API + React frontend, structured
 like the URP project. The ML pipeline from Chapter 3 (Butterworth filter, NeuroKit2,
