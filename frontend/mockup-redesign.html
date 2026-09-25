@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thesis App Redesign Mockup</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f7f9fc;color:#1f2d3d;}
+  .app-shell{position:relative;min-height:100vh;padding:24px 24px 24px 320px;}
+  .sidebar{position:fixed;left:24px;top:24px;bottom:24px;width:280px;background:#ffffff;border:1px solid rgba(31,45,61,.08);border-radius:28px;box-shadow:0 20px 60 rgba(31,45,61,.08);padding:28px;display:flex;flex-direction:column;gap:20px;}
+  .brand{font-size:1.2rem;font-weight:700;color:#2f7c9a;margin-bottom:24px;}
+  .nav-item{position:relative;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;color:#1f2d3d;text-decoration:none;font-weight:600;transition:background .2s ease,transform .2s ease;}
+  .nav-item:hover{background:#eef6fb;transform:translateX(2px);}
+  .nav-item .dot{width:10px;height:10px;border-radius:999px;background:#70b2a1;}
+  .content{display:flex;flex-direction:column;gap:22px;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+  .topbar h1{margin:0;font-size:2rem;letter-spacing:-.03em;}
+  .top-actions{display:flex;gap:12px;}
+  .btn{border:none;border-radius:16px;padding:12px 18px;font-weight:700;cursor:pointer;}
+  .btn-primary{background:#2f7c9a;color:#fff;}
+  .btn-muted{background:#eef2f8;color:#314155;}
+  .hero{background:linear-gradient(135deg,#eff8fd 0%,#ffffff 100%);border:1px solid rgba(47,124,154,.12);border-radius:32px;padding:28px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:center;}
+  .hero-left{display:flex;flex-direction:column;gap:16px;}
+  .hero-left p{margin:0;color:#677386;}
+  .hero-metrics{display:flex;gap:14px;}
+  .metric{background:#fff;border:1px solid rgba(31,45,61,.08);border-radius:22px;padding:20px;width:100%;}
+  .metric span{display:block;color:#677386;font-size:.85rem;margin-bottom:8px;}
+  .metric strong{display:block;font-size:1.3rem;color:#1f2d3d;}
+  .hero-chart{background:#fff;border-radius:28px;height:180px;display:flex;align-items:flex-end;padding:20px;gap:12px;}
+  .bar{flex:1;border-radius:999px;background:#70b2a1;min-height:40px;}
+  .bar:nth-child(2){height:85px;background:#f2b664;}
+  .bar:nth-child(3){height:130px;background:#e76f51;}
+  .panel-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;}
+  .panel{background:#fff;border:1px solid rgba(31,45,61,.08);border-radius:28px;padding:24px;box-shadow:0 20px 45 rgba(31,45,61,.05);}
+  .panel h2{margin:0 0 18px;font-size:1.15rem;}
+  .student-card{display:grid;grid-template-columns:1fr auto;gap:14px;padding:18px;border-radius:24px;border:1px solid rgba(31,45,61,.08);background:#fbfdff;}
+  .student-card h3{margin:0;font-size:1rem;}
+  .status-badge{padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700;display:inline-flex;align-items:center;gap:8px;}
+  .status-calm{background:#edfbf8;color:#2f7c9a;}
+  .status-mild{background:#fff6eb;color:#f57d64;}
+  .status-stress{background:#ffece9;color:#e76f51;}
+  .notes{display:flex;flex-direction:column;gap:16px;}
+  .note-card{background:#f7fbff;border-radius:24px;padding:18px;border:1px solid rgba(47,124,154,.1);}
+  .note-card p{margin:0;}
+  .note-card .meta{margin-top:12px;font-size:.85rem;color:#677386;}
+  .form-card textarea{width:100%;border:1px solid rgba(31,45,61,.12);border-radius:20px;padding:16px;font-size:.95rem;resize:none;min-height:100px;}
+  .form-actions{display:flex;justify-content:flex-end;}
+  .legend{display:flex;gap:12px;margin-top:14px;}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#677386;}
+  .legend-dot{width:12px;height:12px;border-radius:999px;}
+  .dot-calm{background:#70b2a1;}
+  .dot-mild{background:#f2b664;}
+  .dot-stress{background:#e76f51;}
+  .sidebar-toggle{border:none;border-radius:999px;background:#eef2f8;color:#2f7c9a;padding:10px;cursor:pointer;width:42px;height:42px;display:flex;align-items:center;justify-content:center;transition:background .2s ease;}
+  .sidebar-toggle:hover{background:#dceaf2;}
+  .mobile-menu-button{display:none;}
+  .sidebar.collapsed{width:72px;padding:20px 12px;}
+  .sidebar.collapsed .brand{display:none;}
+  .sidebar.collapsed .footer-text{display:none;}
+  .sidebar.collapsed .nav-item{justify-content:center;}
+  .sidebar.collapsed .nav-item .label{display:none;}
+  .sidebar.collapsed .nav-item .dot{margin:0;}
+  .sidebar.collapsed .nav-item{padding:14px 12px;}
+  .sidebar.collapsed .nav-item::after{content:attr(data-label);position:absolute;left:90px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+  .sidebar.collapsed .nav-item:hover::after{opacity:1;}
+  .app-shell.collapsed{padding-left:104px;}
+  @media (max-width: 980px) {
+    .mobile-menu-button{display:flex;}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(31,45,61,.35);z-index:85;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+    .sidebar-overlay.open{display:block;opacity:1;pointer-events:auto;}
+    .app-shell{padding:24px;}
+    .topbar{position:fixed;top:0;left:0;right:0;background:#f7f9fc;z-index:90;padding:18px 24px 16px;box-shadow:0 10px 35 rgba(31,45,61,.08);}
+    .content{margin-top:132px;}
+    .sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:80%;height:100vh;transform:translateX(-100%);transition:transform .25s ease;z-index:100;border-radius:0;padding:24px;}
+    .sidebar.open{transform:translateX(0);}
+    .sidebar.collapsed{width:280px;padding:24px;}
+    .sidebar.collapsed .nav-item{justify-content:flex-start;}
+    .sidebar.collapsed .nav-item .label{display:inline;}
+    .sidebar.collapsed .nav-item::after{display:none;}
+    .sidebar.collapsed .brand{display:block;}
+    .sidebar.collapsed .footer-text{display:block;}
+    .topbar {display:flex;flex-direction:column;align-items:flex-start;gap:14px;}
+    .topbar > div {width:100%;}
+    .topbar h1 {font-size:1.6rem; margin-bottom:4px;}
+    .topbar p {margin:0;}
+    .mobile-menu-button {order:0;}
+    .top-actions {width:100%; display:flex; justify-content:flex-start; flex-wrap:nowrap; gap:10px;}
+    .top-actions .btn {flex:1 1 auto; min-width:120px; padding:10px 14px; font-size:.95rem;}
+    .hero {grid-template-columns:1fr; padding:24px; margin-top:8px;}
+    .hero-chart {height:140px;}
+    .hero-metrics {flex-direction:column;}
+    .panel-grid {grid-template-columns:1fr;}
+    .form-actions {justify-content:flex-start;}
+  }
+  @media (max-width: 620px) {
+    .app-shell {padding:12px;}
+    .sidebar {padding:20px; border-radius:24px;}
+    .nav-item {padding:12px 14px; gap:10px;}
+    .hero {padding:20px;}
+    .metric {padding:16px;}
+    .panel {padding:18px;}
+    .student-card {grid-template-columns:1fr; gap:12px;}
+    .note-card, .form-card textarea {min-height:120px;}
+    .btn {width:100%;}
+    .legend {flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div class="brand">PulseCare</div>
+      <button id="sidebarToggle" class="sidebar-toggle" title="Toggle sidebar">☰</button>
+    </div>
+    <a class="nav-item" href="#" data-label="Dashboard"><span class="dot"></span><span class="label">Dashboard</span></a>
+    <a class="nav-item" href="#" data-label="Students"><span class="dot"></span><span class="label">Students</span></a>
+    <a class="nav-item" href="#" data-label="Stress History"><span class="dot"></span><span class="label">Stress History</span></a>
+    <a class="nav-item" href="#" data-label="Notes"><span class="dot"></span><span class="label">Notes</span></a>
+    <a class="nav-item" href="#" data-label="Settings"><span class="dot"></span><span class="label">Settings</span></a>
+    <div class="footer-text" style="margin-top:auto;font-size:.9rem;color:#677386;line-height:1.6;">Modern counselor toolkit with stress signal clarity and note-centered workflow.</div>
+  </aside>
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+  <main class="content">
+    <div class="topbar">
+      <div>
+        <h1>Student wellbeing</h1>
+      </div>
+      <button id="mobileMenuToggle" class="sidebar-toggle mobile-menu-button" title="Open menu">☰</button>
+      <div class="top-actions">
+        <button class="btn btn-muted">Notification</button>
+        <button class="btn btn-primary">New note</button>
+      </div>
+    </div>
+    <section class="hero">
+      <div class="hero-left">
+        <p>Overview for your caseload this week</p>
+        <div class="hero-metrics">
+          <div class="metric"><span>High stress alerts</span><strong>4</strong></div>
+          <div class="metric"><span>Average stress</span><strong>Moderate</strong></div>
+          <div class="metric"><span>Recent sessions</span><strong>12</strong></div>
+        </div>
+      </div>
+      <div class="hero-chart" aria-label="Stress trend bars">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </section>
+    <div class="panel-grid">
+      <section class="panel">
+        <h2>Student progress</h2>
+        <div class="student-card">
+          <div>
+            <h3>Jordan Lee</h3>
+            <p style="margin:4px 0 0;color:#677386;">Grade 11 • Latest: Stress</p>
+          </div>
+          <div><div class="status-badge status-stress">Stress</div></div>
+        </div>
+        <div class="student-card">
+          <div>
+            <h3>Avery Patel</h3>
+            <p style="margin:4px 0 0;color:#677386;">Grade 10 • Latest: Mild</p>
+          </div>
+          <div><div class="status-badge status-mild">Mild</div></div>
+        </div>
+        <div class="student-card">
+          <div>
+            <h3>Samira Cruz</h3>
+            <p style="margin:4px 0 0;color:#677386;">Grade 12 • Latest: Calm</p>
+          </div>
+          <div><div class="status-badge status-calm">Calm</div></div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Recent counselor note</h2>
+        <div class="form-card">
+          <textarea readonly>Observed elevated stress after last math exam. Recommended mindful breathing before school.</textarea>
+        </div>
+        <div class="form-actions"><button class="btn btn-primary">Save note</button></div>
+      </section>
+    </div>
+    <section class="panel">
+      <h2>Stress timeline</h2>
+      <div style="background:#f7fbff; border-radius:28px; padding:24px; display:grid; gap:18px;">
+        <div style="display:flex;gap:14px;align-items:flex-end;">
+          <div style="flex:1;height:56px;border-radius:999px;background:#70b2a1;"></div>
+          <div style="flex:1;height:110px;border-radius:999px;background:#f2b664;"></div>
+          <div style="flex:1;height:76px;border-radius:999px;background:#70b2a1;"></div>
+          <div style="flex:1;height:140px;border-radius:999px;background:#e76f51;"></div>
+          <div style="flex:1;height:88px;border-radius:999px;background:#f2b664;"></div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot dot-calm"></span>Calm</div>
+          <div class="legend-item"><span class="legend-dot dot-mild"></span>Mild</div>
+          <div class="legend-item"><span class="legend-dot dot-stress"></span>Stress</div>
+        </div>
+      </div>
+    </section>
+    <section class="panel notes">
+      <h2>Recent notes</h2>
+      <div class="note-card">
+        <p>Discussed sleep routine and social stressors; student responded well to breathing exercise.</p>
+        <p class="meta">Apr 18 • Counselor note</p>
+      </div>
+      <div class="note-card">
+        <p>Follow-up on academic pressure. Recommended journaling before bedtime.</p>
+        <p class="meta">Apr 16 • Counselor note</p>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const shell = document.querySelector('.app-shell');
+  const overlay = document.getElementById('sidebarOverlay');
+  const toggle = document.getElementById('sidebarToggle');
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const isMobile = () => window.innerWidth <= 980;
+  const closeMobileMenu = () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  };
+  const openMobileMenu = () => {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+  };
+  toggle.addEventListener('click', () => {
+    if (isMobile()) {
+      sidebar.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+    } else {
+      sidebar.classList.toggle('collapsed');
+      shell.classList.toggle('collapsed');
+    }
+  });
+  mobileToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    sidebar.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+  });
+  overlay.addEventListener('click', closeMobileMenu);
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      closeMobileMenu();
+    }
+  });
+</script>
+</body>
+</html>

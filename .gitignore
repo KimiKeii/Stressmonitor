@@ -1,0 +1,60 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log
+yarn-error.log
+
+# Environment files (backend & frontend - covers .env anywhere in the repo)
+.env
+.env.backup
+.env.production
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.example
+
+# Laravel
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+composer.phar
+
+# Laravel storage/cache (keep folder structure, ignore contents)
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+
+# React / Vite / Node
+/dist
+/build
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.ipynb_checkpoints
+
+# Old/backup folders (based on your repo showing backend-old)
+backend-old/

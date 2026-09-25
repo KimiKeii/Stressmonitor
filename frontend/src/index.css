@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Breathing ring used by the wearable "live signal" motif on the student dashboard */
+@keyframes breathe {
+  0%, 100% { transform: scale(0.86); opacity: 0.3; }
+  50% { transform: scale(1.04); opacity: 0.85; }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(1%, -2%, 0) scale(1.03); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Visible keyboard focus ring in the brand teal instead of the browser default */
+:focus-visible {
+  outline: 2px solid #3FAFA8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* A faint, fixed aurora wash behind every screen — three soft color pools instead of
+   a flat page color, so the light theme reads as calm/breathable rather than sterile. */
+body {
+  background-image:
+    radial-gradient(38% 32% at 12% 8%, rgba(63,175,168,0.10), transparent 70%),
+    radial-gradient(42% 34% at 92% 12%, rgba(239,165,60,0.08), transparent 70%),
+    radial-gradient(46% 38% at 50% 100%, rgba(52,181,127,0.08), transparent 70%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-surface rounded-3xl shadow-[0_10px_30px_-10px_rgba(43,37,52,0.12)] ring-1 ring-black/[0.04];
+    @apply px-4 py-3 sm:px-6 sm:py-4;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white font-semibold rounded-xl px-3 py-2 hover:bg-accent/90 transition-colors shadow-sm shadow-accent/20;
+    @apply sm:px-4 sm:py-2.5;
+  }
+
+  .btn-ghost {
+    @apply border border-border text-ink rounded-xl px-3 py-2 hover:bg-black/[0.03] transition-colors;
+    @apply sm:px-4 sm:py-2.5;
+  }
+
+  /* Small variant for compact buttons (use alongside btn-primary or btn-ghost) */
+  .btn-sm {
+    @apply text-sm px-2 py-1 rounded-lg;
+  }
+  /* Extra small compact buttons */
+  .btn-xs {
+    @apply text-xs px-1.5 py-0.5 rounded-md;
+  }
+
+  .field {
+    @apply w-full bg-base border border-border rounded-xl px-3 py-2.5 text-ink placeholder:text-muted outline-none focus:border-accent/60 focus:bg-white transition-colors;
+    @apply sm:px-4 sm:py-3;
+  }
+
+  /* Custom scrollbar for inputs / textareas to match the UI theme */
+  .field::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .field::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .field::-webkit-scrollbar-thumb {
+    background: rgba(111,102,132,0.22); /* muted thumb */
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  @supports (scrollbar-color: auto) {
+    .field {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(111,102,132,0.22) transparent;
+    }
+  }
+
+  /* Global/page scrollbar to match inputs (apply to both html and body) */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background: rgba(111,102,132,0.22);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  @supports (scrollbar-color: auto) {
+    html, body {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(111,102,132,0.22) transparent;
+    }
+  }
+}
